@@ -16,33 +16,7 @@ export default function Auth() {
   const getRoute = () => {
     return window.location.pathname !== "/auth/full-screen-maps";
   };
-  useEffect(()=>{
-    getData();
-  },[])
-  const getData = async() =>{
-    // const response = await axios.get('/get_index_history')
-    // console.log(response,"responsee")
-    fetch('http://127.0.0.1:8001/get_index_history', {
-  method: 'GET', 
-  headers: {
-    'Content-Type': 'application/json',
-    
-  },
-  // Include body if method is POST or PUT
-  // body: JSON.stringify({ key: 'value' }),
-}).then(response => {
-  if (!response.ok) {
-    throw new Error('Network response was not ok');
-  }
-  return response.json(); // Parse JSON response
-})
-.then(data => {
-  console.log(data); // Here's your data
-})
-.catch(error => {
-  console.error('There was a problem with your fetch operation:', error);
-});
-  }
+  
   const getRoutes = (routes) => {
     return routes.map((prop, key) => {
       if (prop.layout === "/auth") {
