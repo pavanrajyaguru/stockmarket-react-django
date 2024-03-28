@@ -17,7 +17,7 @@ urlpatterns = [
     path("get_running_status",views.get_running_status),
     # path("overview",views.overview),
     # path("get_overview/<index>/",views.get_overview),
-    # path("get_daily_bhav_copy",views.get_daily_bhav_copy),
+    path("get_daily_bhav_copy",views.get_daily_bhav_copy),
     # path("get_chart_data",views.get_chart_data),
-    # path("get_nse_fno_list",views.get_nse_fno_list),
+    path("get_nse_fno_list",views.get_nse_fno_list),
 ]

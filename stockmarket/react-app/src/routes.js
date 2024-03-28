@@ -15,6 +15,10 @@ import NFTMarketplace from "views/admin/marketplace";
 import Profile from "views/admin/profile";
 import DataTables from "views/admin/dataTables";
 import RTL from "views/admin/rtl";
+import AdvanceChart from "components/advance_chart/AdvanceChart";
+import HeatMap from "views/admin/default/components/HeatMap";
+import Currency from "views/admin/default/components/Currency";
+import GlobalCalender from "views/admin/default/components/GlobalCalender";
 
 // Auth Imports
 import SignInCentered from "views/auth/signIn";
@@ -26,6 +30,34 @@ const routes = [
     path: "/default",
     icon: <Icon as={MdHome} width='20px' height='20px' color='inherit' />,
     component: MainDashboard,
+  },
+  {
+    name: "Advance Chart",
+    layout: "/admin",
+    path: "/advanceChart",
+    icon: <Icon as={MdHome} width='20px' height='20px' color='inherit' />,
+    component: AdvanceChart,
+  },
+  {
+    name: "Heat Map",
+    layout: "/admin",
+    path: "/heatmap",
+    icon: <Icon as={MdHome} width='20px' height='20px' color='inherit' />,
+    component: HeatMap,
+  },
+  {
+    name: "Currency",
+    layout: "/admin",
+    path: "/currency",
+    icon: <Icon as={MdHome} width='20px' height='20px' color='inherit' />,
+    component: Currency,
+  },
+  {
+    name: "Economic Calender",
+    layout: "/admin",
+    path: "/calender",
+    icon: <Icon as={MdHome} width='20px' height='20px' color='inherit' />,
+    component: GlobalCalender,
   },
   {
     name: "NFT Marketplace",

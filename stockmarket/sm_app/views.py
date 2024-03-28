@@ -106,3 +106,50 @@ def get_indices(request):
 
 def get_running_status(request):
     return HttpResponse(str(running_status()))
+
+def get_nse_fno_list(request):
+    fno_list = fnolist()
+    print("fno_list", fno_list)
+    # print(nse_eq("JUSTDIAL")['priceInfo']['open'])
+    # print(nse_eq("JUSTDIAL")['priceInfo']['intraDayHighLow']['min'])
+    # print(nse_eq("JUSTDIAL")['priceInfo']['intraDayHighLow']['max'])
+    # print(nse_eq("JUSTDIAL")['priceInfo']['close'])
+    return HttpResponse(json.dumps(fno_list),content_type='application/json')
+
+
+@csrf_exempt
+def get_daily_bhav_copy(request):
+    
+    today = datetime.now()
+    weekday = today.weekday()
+    
+    if weekday == 5:  # Saturday
+        adjusted_date = today - timedelta(days=1)
+    elif weekday == 6:  # Sunday
+        adjusted_date = today - timedelta(days=2)
+    else:
+        adjusted_date = today
+    
+    adjusted_date = adjusted_date.strftime("%d-%m-%Y")
+    
+    post_data = {}
+    if request.body != b'' :
+        post_data = json.loads(request.body)
+        bhavcopy = get_bhavcopy(post_data.get("bhav_date"))
+    else : 
+        bhavcopy = get_bhavcopy(adjusted_date)
+    
+    return HttpResponse(json.dumps(bhavcopy.to_json(orient='records')))
+
+def get_index_history(request):
+    
+    # post_data = json.loads(request.body)
+    
+    # symbol = post_data["symbol"]
+    # start_date = post_data["start_date"]
+    # end_date = post_data["end_date"]
+    
+    respoonse = index_history("NIFTY","24-02-2024","25-03-2024")
+    print("respoonse", respoonse)
+    
+    return HttpResponse(json.loads(respoonse))
