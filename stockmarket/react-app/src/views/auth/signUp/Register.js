@@ -3,11 +3,12 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import { useState } from "react";
+// import { useToast } from "@chakra-ui/react";
+
 // Chakra imports
 import {
   Box,
   Button,
-  Checkbox,
   Flex,
   FormControl,
   FormLabel,
@@ -18,6 +19,7 @@ import {
   InputRightElement,
   Text,
   useColorModeValue,
+  Select,
 } from "@chakra-ui/react";
 // Custom components
 import DefaultAuth from "layouts/auth/Default";
@@ -27,41 +29,49 @@ import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { RiEyeCloseLine } from "react-icons/ri";
 import axios from "axios";
 
-function SignIn() {
+function Register() {
   // Chakra color mode
   const textColor = useColorModeValue("navy.700", "white");
   const textColorSecondary = "gray.400";
-  const textColorDetails = useColorModeValue("navy.700", "secondaryGray.600");
-  const textColorBrand = useColorModeValue("brand.500", "white");
   const brandStars = useColorModeValue("brand.500", "brand.400");
+  const [uname,setuname] = useState('');
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [gender, setGender] = useState(""); 
   const [show, setShow] = React.useState(false);
   const handleClick = () => setShow(!show);
+//   const toast = useToast();
   const handleSignIn = () => {
-    axios.post("http://127.0.0.1:8000/is_login")
-    .then((response) => {
-      
-      console.log(response.data);
-    })
-    .catch((error) => {
     
-      console.error("Error:", error);
-    });
-    
-    axios.post("http://127.0.0.1:8000/auth_user", {
-      email : email,
+    axios.post("http://127.0.0.1:8000/register_action", {
+        uname : uname,
+        email : email,
       password : password,
+      gender : gender,
+
     })
       .then((response) => {
       
         console.log(response.data);
+        // toast({
+        //     title: "Registration Successful",
+        //     status: "success",
+        //     duration: 3000,
+        //     isClosable: true,
+        // });
       })
       .catch((error) => {
       
         console.error("Error:", error);
+        // toast({
+        //     title: "Registration Error",
+        //     description: "An error occurred during registration.",
+        //     status: "error",
+        //     duration: 3000,
+        //     isClosable: true,
+        // });
       });
-  };
+  };    
 
   return (
     <DefaultAuth>
@@ -79,16 +89,9 @@ function SignIn() {
         flexDirection='column'>
         <Box me='auto'>
           <Heading color={textColor} fontSize='36px' mb='10px'>
-            Sign In
+            Sign Up
           </Heading>
-          <Text
-            mb='36px'
-            ms='4px'
-            color={textColorSecondary}
-            fontWeight='400'
-            fontSize='md'>
-            Enter your email and password to sign in!
-          </Text>
+          <br />
         </Box>
         <Flex
           zIndex='2'
@@ -102,6 +105,28 @@ function SignIn() {
           mb={{ base: "20px", md: "auto" }}>
           
           <FormControl>
+          <FormLabel
+              display='flex'
+              ms='4px'
+              fontSize='sm'
+              fontWeight='500'
+              color={textColor}
+              mb='8px'>
+              UserName<Text color={brandStars}>*</Text>
+            </FormLabel>
+            <Input
+               value={uname}
+               onChange={(e) => setuname(e.target.value)}
+              isRequired={true}
+              variant='auth'
+              fontSize='sm'
+              ms={{ base: "0px", md: "0px" }}
+              type='text'
+              placeholder='enter user name'
+              mb='24px'
+              fontWeight='500'
+              size='lg'
+            />
             <FormLabel
               display='flex'
               ms='4px'
@@ -154,9 +179,27 @@ function SignIn() {
                 />
               </InputRightElement>
             </InputGroup>
+            <FormLabel
+              ms="4px"
+              fontSize="sm"
+              fontWeight="500"
+              display="flex"
+            >
+              Gender
+            </FormLabel>
+            <Select
+              value={gender}
+              onChange={(e) => setGender(e.target.value)}
+              placeholder="Select gender"
+              variant="auth"
+              fontSize="sm"
+              mb="24px"
+            >
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+            </Select>
             <Flex justifyContent='space-between' align='center' mb='24px'>
             </Flex>
-            
             <Button
               onClick={handleSignIn}
               fontSize='sm'
@@ -165,32 +208,14 @@ function SignIn() {
               w='100%'
               h='50'
               mb='24px'>
-              Sign In
+              Register
             </Button>
           </FormControl>
-          <Flex
-            flexDirection='column'
-            justifyContent='center'
-            alignItems='start'
-            maxW='100%'
-            mt='0px'>
-            <Text color={textColorDetails} fontWeight='400' fontSize='14px'>
-              Not registered yet?
-              <NavLink to='/auth/register'>
-                <Text
-                  color={textColorBrand}
-                  as='span'
-                  ms='5px'
-                  fontWeight='500'>
-                  Create an Account
-                </Text>
-              </NavLink>
-            </Text>
-          </Flex>
+         
         </Flex>
       </Flex>
     </DefaultAuth>
   );
 }
 
-export default SignIn;
+export default Register;

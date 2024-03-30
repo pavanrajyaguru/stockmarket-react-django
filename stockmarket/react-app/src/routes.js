@@ -19,7 +19,7 @@ import AdvanceChart from "components/advance_chart/AdvanceChart";
 import HeatMap from "views/admin/default/components/HeatMap";
 import Currency from "views/admin/default/components/Currency";
 import GlobalCalender from "views/admin/default/components/GlobalCalender";
-
+import Register from "views/auth/signUp/Register";
 // Auth Imports
 import SignInCentered from "views/auth/signIn";
 
@@ -102,6 +102,16 @@ const routes = [
     icon: <Icon as={MdHome} width='20px' height='20px' color='inherit' />,
     component: RTL,
   },
+
+  {
+  
+    layout: "/auth",
+    path: "/register",
+    component: Register,
+  },
+ 
+  
+
 ];
 
 export default routes;

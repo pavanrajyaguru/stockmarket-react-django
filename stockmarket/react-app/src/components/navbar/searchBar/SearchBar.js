@@ -5,19 +5,27 @@ import {
   InputGroup,
   InputLeftElement,
   useColorModeValue,
+  Button,
 } from "@chakra-ui/react";
 import { SearchIcon } from "@chakra-ui/icons";
+import { NavLink } from "react-router-dom/cjs/react-router-dom.min";
+import axios from "axios";
 export function SearchBar(props) {
-  // Pass the computed styles into the `__css` prop
-  const { variant, background, children, placeholder, borderRadius, ...rest } =
-    props;
-  // Chakra Color Mode
-  const searchIconColor = useColorModeValue("gray.700", "white");
-  const inputBg = useColorModeValue("secondaryGray.300", "navy.900");
-  const inputText = useColorModeValue("gray.700", "gray.100");
+  const { variant, background, children, placeholder, borderRadius, ...rest } =props;
+  const handleLogout = () =>{
+    axios.post("http://127.0.0.1:8000/logout")
+      .then((response) => {
+      
+        console.log(response.data);
+      })
+      .catch((error) => {
+      
+        console.error("Error:", error);
+      });
+  }
   return (
-    <InputGroup w={{ base: "100%", md: "200px" }} {...rest}>
-      <InputLeftElement
+    <InputGroup>
+      {/* <InputLeftElement
         children={
           <IconButton
             bg='inherit'
@@ -35,8 +43,8 @@ export function SearchBar(props) {
               <SearchIcon color={searchIconColor} w='15px' h='15px' />
             }></IconButton>
         }
-      />
-      <Input
+      /> */}
+      {/* <Input
         variant='search'
         fontSize='sm'
         bg={background ? background : inputBg}
@@ -45,7 +53,12 @@ export function SearchBar(props) {
         _placeholder={{ color: "gray.400", fontSize: "14px" }}
         borderRadius={borderRadius ? borderRadius : "30px"}
         placeholder={placeholder ? placeholder : "Search..."}
-      />
+      /> */}
+      <NavLink to="/admin/default"> 
+      <Button onClick={handleLogout}>
+        LogOut
+      </Button>
+      </NavLink>
     </InputGroup>
   );
 }
