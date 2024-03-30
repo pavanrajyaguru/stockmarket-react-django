@@ -25,7 +25,7 @@ def get_index_history(request):
 @csrf_exempt
 def register_action(request):
     post_data = json.loads(request.body)
-    uname =  post_data["username"]
+    uname =  post_data["uname"]
     email = post_data["email"]
     password = make_password(post_data["password"])
     gender = post_data["gender"]
@@ -46,7 +46,6 @@ def auth_user(request):
 
     if email != None and password != None:
         user_obj = User.objects.filter(email = email).values()
-        print(user_obj[0],"user")
         if len(user_obj) > 0 :
             if check_password(password,user_obj[0]["password"]):
                 response = { "code":1,"msg":"Login Successfull" ,"data":user_obj[0]}
@@ -54,18 +53,21 @@ def auth_user(request):
                 request.session["name"] = user_obj[0]["name"]
                 request.session["email"] = user_obj[0]["email"]
                 request.session["gender"] = user_obj[0]["gender"]
+                print(request.session.keys())
             else : 
                 response = { "code":0,"msg":"Incorrect Email or password"}
             return HttpResponse(json.dumps(response))
         
     return HttpResponse(json.dumps({ "code":0,"msg":"Email and Password not found" }))
-        
+ 
+@csrf_exempt       
 def is_login(request):
     
     response = {
         "code" : 0,
         "data" : {}
     }
+    print(request.session.keys())
     
     if "id" in request.session:
         response["code"] = 1
@@ -141,15 +143,15 @@ def get_daily_bhav_copy(request):
     
     return HttpResponse(json.dumps(bhavcopy.to_json(orient='records')))
 
-def get_index_history(request):
+# def get_index_history(request):
     
-    # post_data = json.loads(request.body)
+#     # post_data = json.loads(request.body)
     
-    # symbol = post_data["symbol"]
-    # start_date = post_data["start_date"]
-    # end_date = post_data["end_date"]
+#     # symbol = post_data["symbol"]
+#     # start_date = post_data["start_date"]
+#     # end_date = post_data["end_date"]
     
-    respoonse = index_history("NIFTY","24-02-2024","25-03-2024")
-    print("respoonse", respoonse)
+#     respoonse = index_history("NIFTY","24-02-2024","25-03-2024")
+#     print("respoonse", respoonse)
     
-    return HttpResponse(json.loads(respoonse))
+#     return HttpResponse(json.loads(respoonse))
