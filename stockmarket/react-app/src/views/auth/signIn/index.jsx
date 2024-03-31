@@ -3,6 +3,8 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import { useState } from "react";
+import { useToast } from "@chakra-ui/react";
+
 // Chakra imports
 import {
   Box,
@@ -26,9 +28,13 @@ import illustration from "assets/img/auth/auth.png";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { RiEyeCloseLine } from "react-icons/ri";
 import axios from "axios";
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 function SignIn() {
   // Chakra color mode
+  const toast = useToast();
+  const history = useHistory();
   const textColor = useColorModeValue("navy.700", "white");
   const textColorSecondary = "gray.400";
   const textColorDetails = useColorModeValue("navy.700", "secondaryGray.600");
@@ -43,10 +49,25 @@ function SignIn() {
     .then((response) => {
       
       console.log(response.data);
+      history.push("/admin/default")
+      toast({
+        title: "Sign In Successful",
+        description: "Login successful.",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
     })
     .catch((error) => {
     
       console.error("Error:", error);
+      toast({
+        title: "Sign In Failed",
+        description: "Invalid email or password.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
     });
     
     axios.post("http://127.0.0.1:8000/auth_user", {
@@ -61,6 +82,9 @@ function SignIn() {
       
         console.error("Error:", error);
       });
+      setEmail('')
+      setPassword('')
+      
   };
 
   return (
@@ -187,6 +211,7 @@ function SignIn() {
               </NavLink>
             </Text>
           </Flex>
+          <ToastContainer />
         </Flex>
       </Flex>
     </DefaultAuth>

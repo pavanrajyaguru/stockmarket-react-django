@@ -3,7 +3,7 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import { useState } from "react";
-// import { useToast } from "@chakra-ui/react";
+import { useToast } from "@chakra-ui/react";
 
 // Chakra imports
 import {
@@ -31,6 +31,7 @@ import axios from "axios";
 
 function Register() {
   // Chakra color mode
+  const toast = useToast();
   const textColor = useColorModeValue("navy.700", "white");
   const textColorSecondary = "gray.400";
   const brandStars = useColorModeValue("brand.500", "brand.400");
@@ -40,7 +41,7 @@ function Register() {
   const [gender, setGender] = useState(""); 
   const [show, setShow] = React.useState(false);
   const handleClick = () => setShow(!show);
-//   const toast = useToast();
+
   const handleSignIn = () => {
     
     axios.post("http://127.0.0.1:8000/register_action", {
@@ -53,24 +54,43 @@ function Register() {
       .then((response) => {
       
         console.log(response.data);
-        // toast({
-        //     title: "Registration Successful",
-        //     status: "success",
-        //     duration: 3000,
-        //     isClosable: true,
-        // });
+        history.push("/auth/sign-in")
+        if(response.data == "Email already exist!"){
+          toast({
+            title: "Registration Error",
+            description: "An error occurred during registration.",
+            status: "error",
+            duration: 3000,
+            isClosable: true,
+        });
+
+        }
+        else{
+          toast({
+            title: "Registration Successful",
+            status: "success",
+            duration: 3000,
+            isClosable: true,
+        });
+        }
+
       })
       .catch((error) => {
       
         console.error("Error:", error);
-        // toast({
-        //     title: "Registration Error",
-        //     description: "An error occurred during registration.",
-        //     status: "error",
-        //     duration: 3000,
-        //     isClosable: true,
-        // });
+        toast({
+            title: "Registration Error",
+            description: "An error occurred during registration.",
+            status: "error",
+            duration: 3000,
+            isClosable: true,
+        });
+
       });
+      setEmail('')
+      setuname('')
+      setGender('')
+      setPassword('')
   };    
 
   return (
@@ -211,7 +231,19 @@ function Register() {
               Register
             </Button>
           </FormControl>
-         
+          <Text fontWeight='400' fontSize='14px'>
+              Already have an account?
+          <NavLink to='/auth/sign-in'>
+                <Text
+                  as='span'
+                  ms='5px'
+                  fontWeight='500'>
+                  Login
+                </Text>
+              </NavLink>
+              
+          </Text>
+          {/* <ToastContainer /> */}
         </Flex>
       </Flex>
     </DefaultAuth>
