@@ -155,3 +155,37 @@ def get_daily_bhav_copy(request):
 #     print("respoonse", respoonse)
     
 #     return HttpResponse(json.loads(respoonse))
+
+@csrf_exempt
+def add_to_watchlist(request):
+    
+    post_data = []
+    print("request.body", request.POST)
+    if request.POST != b'':
+        post_data = request.POST
+        
+        user_id = post_data["id"]
+        watchlist_name = post_data["watchlist_name"]
+        index = post_data["index"]
+        
+        user_obj = User.objects.get(id = user_id)
+        watchlist_obj = Watch_list(user_id = user_obj,index=index,w_name=watchlist_name)
+        watchlist_obj.save()
+        
+        return HttpResponse(json.dumps({"code": 1,"msg" : "Added to watchlist"}))
+    
+    else:
+        return HttpResponse(json.dumps({"code": 0,"msg" : "Error Occoured"}))
+        
+@csrf_exempt
+def get_watchlist(request):
+    
+    if request.POST != b'':
+        post_data = request.POST
+        user_id = post_data["id"]
+        
+        watchlist_obj = Watch_list.objects.filter(user_id = user_id).values()
+        print("watchlist_obj", watchlist_obj)
+        
+        return HttpResponse(json.dumps(watchlist_obj))
+        
