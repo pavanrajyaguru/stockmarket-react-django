@@ -94,10 +94,14 @@ def logout(request):
 @csrf_exempt
 def get_indices(request):
     positions = nsefetch('https://www.nseindia.com/api/equity-stockIndices?index=SECURITIES%20IN%20F%26O')
-    post_data = json.loads(request.body)
+    
+    if request.body == b'':
+        post_data = {}
+    else:
+        post_data = json.loads(request.body)
     start = post_data.get("start",0)
     end = post_data.get("end",10)
-    print(get_bhavcopy("04-06-2021"))
+    # print(get_bhavcopy("04-06-2021"))
     # events = nse_events()
     # circular = nse_circular(mode="latest")
     # quote = nsetools_get_quote("IBM")
@@ -160,9 +164,8 @@ def get_daily_bhav_copy(request):
 def add_to_watchlist(request):
     
     post_data = []
-    print("request.body", request.POST)
-    if request.POST != b'':
-        post_data = request.POST
+    if request.body != b'':
+        post_data = request.body
         
         user_id = post_data["id"]
         watchlist_name = post_data["watchlist_name"]
@@ -180,12 +183,29 @@ def add_to_watchlist(request):
 @csrf_exempt
 def get_watchlist(request):
     
-    if request.POST != b'':
-        post_data = request.POST
+    if request.body != b'':
+        post_data = request.body
         user_id = post_data["id"]
         
         watchlist_obj = Watch_list.objects.filter(user_id = user_id).values()
-        print("watchlist_obj", watchlist_obj)
         
         return HttpResponse(json.dumps(watchlist_obj))
+    
+    
+@csrf_exempt 
+def remove_from_watchlist(request):
+    
+    if request.body == b'':
+        return HttpResponse(json.loads({"code":0,"msg":"Error occoured"}))
+    else:
+        post_data = json.loads(request.body)
+        
+        user_id = post_data["id"]
+        watchlist_name = post_data["watchlist_name"]
+        index = post_data["index"]
+        
+        watchlist_obj = Watch_list.objects.get(id=user_id,w_name=watchlist_name,index = index)
+        watchlist_obj.delete()
+        
+        return HttpResponse(json.dumps({"code":1,"msg":"Removed from watchlist"}))
         

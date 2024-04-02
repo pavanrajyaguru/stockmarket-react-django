@@ -12,7 +12,7 @@ urlpatterns = [
     path("is_login",views.is_login),
     path("logout",views.logout),
     
-    path("getindices",views.get_indices),
+    path("get_indices",views.get_indices),
     path("get_index_history",views.get_index_history),
     path("get_running_status",views.get_running_status),
     # path("overview",views.overview),
