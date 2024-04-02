@@ -20,8 +20,10 @@ import HeatMap from "views/admin/default/components/HeatMap";
 import Currency from "views/admin/default/components/Currency";
 import GlobalCalender from "views/admin/default/components/GlobalCalender";
 import Register from "views/auth/signUp/Register";
+import WatchList from "views/admin/default/components/WatchList";
 // Auth Imports
 import SignInCentered from "views/auth/signIn";
+
 
 const routes = [
   {
@@ -51,6 +53,13 @@ const routes = [
     path: "/currency",
     icon: <Icon as={MdHome} width='20px' height='20px' color='inherit' />,
     component: Currency,
+  },
+  {
+    name: "WatchList",
+    layout : "/admin",
+    path : "/watchlist",
+    icon: <Icon as={MdHome} width='20px' height='20px' color='inherit' />,
+    component : WatchList,
   },
   {
     name: "Economic Calender",
