@@ -1,50 +1,97 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Table } from 'antd';
-
-
+import { Table, Spin } from 'antd';
+import {PlusCircleOutlined} from '@ant-design/icons'
 const WatchList = () => {
   const [indices, setIndices] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const getIndices = async () => {
+    setLoading(true);
     try {
       const response = await axios.post("http://127.0.0.1:8000/get_indices");
-      console.log(response.data);
-      setIndices(response.data); // Set the fetched data to the state
+      setIndices(response.data);
     } catch (error) {
-      console.log(error);
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
     }
   };
+  const handleAddToWatchList = async(symbol) =>{
+    try{
+      const response = await axios.post("http://127.0.0.1:8000/add_to_watchlist",{
+        id : 1,
+        index : symbol,
+        watchlist_name : "abc"
+      })
+      console.log(response,"addwatchlist")
+
+    }
+    catch(error){
+      console.log(error)
+    }
+  }
 
   useEffect(() => {
     getIndices();
   }, []);
 
-  // Define columns for the table
   const columns = [
+   
     {
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
+      title: 'Company Name',
+      dataIndex: 'companyName',
+      key: 'companyName',
+      render: (text, record) => <span>{record.meta.companyName}</span>
     },
     {
-      title: 'Value',
-      dataIndex: 'value',
-      key: 'value',
+      title: 'Symbol',
+      dataIndex: 'symbol',
+      key: 'symbol',
+      render: (text, record) => <span>{record.symbol}</span>
     },
-    // Add more columns as needed
+    {
+      title: 'Day High',
+      dataIndex: 'dayHigh',
+      key: 'dayHigh',
+      render: (text, record) => <span>{record.dayHigh}</span>
+    },
+    {
+      title: 'Day Low',
+      dataIndex: 'dayLow',
+      key: 'dayLow',
+      render: (text, record) => <span>{record.dayLow}</span>
+    },
+    {
+      title: '% Change',
+      dataIndex: 'pChange',
+      key: 'pChange',
+      render: (text, record) => <span>{record.pChange}</span>
+    },
+    {
+      title : 'Action',
+      dataIndex : 'action',
+      render : (record) => {
+        return(
+          <>
+            <PlusCircleOutlined onClick={handleAddToWatchList(record.symbolname)}/>
+          </>
+          )
+      }
+    }
   ];
 
   return (
-    <>
-     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nec libero nec nunc commodo viverra. Nullam nec fringilla lacus, id vestibulum sapien. Integer sed est in dolor placerat volutpat. Sed ut justo auctor, fringilla mi nec, fermentum nisi. Ut ac lacus ac libero ultricies tempus. In hac habitasse platea dictumst. Suspendisse non mauris a libero sollicitudin faucibus sed sed enim. Sed ullamcorper, libero nec cursus mattis, ipsum sapien cursus ex, at dictum elit nunc id mauris. Maecenas varius, risus a feugiat posuere, ipsum sem commodo eros, in fringilla turpis lacus eget purus. Sed ultricies libero non orci rhoncus, vitae accumsan nisi bibendum. Vivamus nec vestibulum eros. Aenean et neque id tortor venenatis gravida. Vivamus tincidunt, libero non bibendum dapibus, justo nulla consectetur est, nec dignissim enim eros nec purus. Sed fermentum libero ut nibh varius interdum. Sed non sollicitudin libero.</p>
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nec libero nec nunc commodo viverra. Nullam nec fringilla lacus, id vestibulum sapien. Integer sed est in dolor placerat volutpat. Sed ut justo auctor, fringilla mi nec, fermentum nisi. Ut ac lacus ac libero ultricies tempus. In hac habitasse platea dictumst. Suspendisse non mauris a libero sollicitudin faucibus sed sed enim. Sed ullamcorper, libero nec cursus mattis, ipsum sapien cursus ex, at dictum elit nunc id mauris. Maecenas varius, risus a feugiat posuere, ipsum sem commodo eros, in fringilla turpis lacus eget purus. Sed ultricies libero non orci rhoncus, vitae accumsan nisi bibendum. Vivamus nec vestibulum eros. Aenean et neque id tortor venenatis gravida. Vivamus tincidunt, libero non bibendum dapibus, justo nulla consectetur est, nec dignissim enim eros nec purus. Sed fermentum libero ut nibh varius interdum. Sed non sollicitudin libero.</p>
-      <div className='container'>
-        <p>lorem ip</p>
-        <h2>WatchList</h2>
+    <div className='container' style={{marginTop:"100px"}}>
+      <h2>WatchList</h2>
+      {loading ? (
+        <Spin size="large" />
+      ) : indices.length ? (
         <Table dataSource={indices} columns={columns} />
-      </div>
-    </>
+      ) : (
+        <p>No data available</p>
+      )}
+    </div>
   );
 };
 
