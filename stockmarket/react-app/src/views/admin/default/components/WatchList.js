@@ -71,10 +71,11 @@ const WatchList = () => {
     {
       title : 'Action',
       dataIndex : 'action',
-      render : (record) => {
+      render : (text, record) => {
+        console.log("Records Data : ",record);
         return(
           <>
-            <PlusCircleOutlined onClick={handleAddToWatchList(record.symbolname)}/>
+            <PlusCircleOutlined onClick={handleAddToWatchList(record.symbol)}/>
           </>
           )
       }

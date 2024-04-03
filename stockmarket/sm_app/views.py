@@ -165,9 +165,9 @@ def add_to_watchlist(request):
     
     post_data = []
     if request.body != b'':
-        post_data = request.body
+        post_data = json.loads(request.body)
         
-        user_id = post_data["id"]
+        user_id = post_data["user_id"]
         watchlist_name = post_data["watchlist_name"]
         index = post_data["index"]
         
@@ -184,8 +184,8 @@ def add_to_watchlist(request):
 def get_watchlist(request):
     
     if request.body != b'':
-        post_data = request.body
-        user_id = post_data["id"]
+        post_data = json.loads(request.body)
+        user_id = post_data["user_id"]
         
         watchlist_obj = Watch_list.objects.filter(user_id = user_id).values()
         
@@ -200,12 +200,18 @@ def remove_from_watchlist(request):
     else:
         post_data = json.loads(request.body)
         
-        user_id = post_data["id"]
+        user_id = post_data["user_id"]
         watchlist_name = post_data["watchlist_name"]
         index = post_data["index"]
         
-        watchlist_obj = Watch_list.objects.get(id=user_id,w_name=watchlist_name,index = index)
+        watchlist_obj = Watch_list.objects.get(user_id=user_id,w_name=watchlist_name,index = index)
         watchlist_obj.delete()
         
         return HttpResponse(json.dumps({"code":1,"msg":"Removed from watchlist"}))
+    
+    
+def get_data(request):
+    watchlist_obj = Watch_list.objects.filter().order_by('-id').values()
+    pprint("watchlist_obj", watchlist_obj)
+    return HttpResponse("True")
         
