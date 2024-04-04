@@ -20,7 +20,7 @@ const WatchList = () => {
   const handleAddToWatchList = async(symbol) =>{
     try{
       const response = await axios.post("http://127.0.0.1:8000/add_to_watchlist",{
-        id : 1,
+        user_id : 1,
         index : symbol,
         watchlist_name : "abc"
       })
@@ -75,7 +75,7 @@ const WatchList = () => {
         console.log("Records Data : ",record);
         return(
           <>
-            <PlusCircleOutlined onClick={handleAddToWatchList(record.symbol)}/>
+            <PlusCircleOutlined onClick={() => handleAddToWatchList(record.symbol)}/>
           </>
           )
       }

@@ -13,15 +13,7 @@ import axios from "axios";
 export function SearchBar(props) {
   const { variant, background, children, placeholder, borderRadius, ...rest } =props;
   const handleLogout = () =>{
-    axios.post("http://127.0.0.1:8000/logout")
-      .then((response) => {
-      
-        console.log(response.data);
-      })
-      .catch((error) => {
-      
-        console.error("Error:", error);
-      });
+    localStorage.clear();
   }
   return (
     <InputGroup>

@@ -45,46 +45,47 @@ function SignIn() {
   const [show, setShow] = React.useState(false);
   const handleClick = () => setShow(!show);
   const handleSignIn = () => {
-    axios.post("http://127.0.0.1:8000/is_login")
-    .then((response) => {
-      
-      console.log(response.data);
-      history.push("/admin/default")
-      toast({
-        title: "Sign In Successful",
-        description: "Login successful.",
-        status: "success",
-        duration: 3000,
-        isClosable: true,
-      });
-    })
-    .catch((error) => {
-    
-      console.error("Error:", error);
-      toast({
-        title: "Sign In Failed",
-        description: "Invalid email or password.",
-        status: "error",
-        duration: 3000,
-        isClosable: true,
-      });
-    });
-    
+   
     axios.post("http://127.0.0.1:8000/auth_user", {
-      email : email,
-      password : password,
+      email: email,
+      password: password,
     })
       .then((response) => {
-      
+        
         console.log(response.data);
+        if(response.data.code == 0){
+          toast({
+            title: "Sign In Not successful",
+            description: "Try again",
+            status: "error",
+            duration: 3000,
+            isClosable: true,
+          });
+        }
+        else{
+          localStorage.setItem("id",response.data.data.id)
+          localStorage.setItem("email",email)
+          // localStorage.setItem("auth_user",password)
+          localStorage.setItem("name",response.data.data.name)
+          localStorage.setItem("gender",response.data.data.gender)
+          toast({
+            title: "Sign In Successful",
+            description: "Login successful.",
+            status: "success",
+            duration: 3000,
+            isClosable: true,
+          });
+          history.push("/admin/default")
+        }
+
       })
       .catch((error) => {
-      
+
         console.error("Error:", error);
       });
-      setEmail('')
-      setPassword('')
-      
+    setEmail('')
+    setPassword('')
+
   };
 
   return (
@@ -124,7 +125,7 @@ function SignIn() {
           mx={{ base: "auto", lg: "unset" }}
           me='auto'
           mb={{ base: "20px", md: "auto" }}>
-          
+
           <FormControl>
             <FormLabel
               display='flex'
@@ -136,8 +137,8 @@ function SignIn() {
               Email<Text color={brandStars}>*</Text>
             </FormLabel>
             <Input
-               value={email}
-               onChange={(e) => setEmail(e.target.value)}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               isRequired={true}
               variant='auth'
               fontSize='sm'
@@ -149,7 +150,7 @@ function SignIn() {
               size='lg'
             />
             <FormLabel
-            
+
               ms='4px'
               fontSize='sm'
               fontWeight='500'
@@ -159,8 +160,8 @@ function SignIn() {
             </FormLabel>
             <InputGroup size='md'>
               <Input
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 isRequired={true}
                 fontSize='sm'
                 placeholder='Min. 8 characters'
@@ -180,7 +181,7 @@ function SignIn() {
             </InputGroup>
             <Flex justifyContent='space-between' align='center' mb='24px'>
             </Flex>
-            
+
             <Button
               onClick={handleSignIn}
               fontSize='sm'
