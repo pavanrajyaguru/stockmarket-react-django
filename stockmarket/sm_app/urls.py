@@ -22,6 +22,7 @@ urlpatterns = [
     path("get_nse_fno_list",views.get_nse_fno_list),
     path("add_to_watchlist",views.add_to_watchlist),
     path("get_watchlist",views.get_watchlist),
+    path("remove_from_watchlist",views.remove_from_watchlist),
     path("get_data",views.get_data),
     
 ]

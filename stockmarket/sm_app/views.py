@@ -1,5 +1,6 @@
 from django.shortcuts import render
-from django.http import HttpResponse,JSONResponse
+from django.http import HttpResponse
+
 from django.views.decorators.csrf import csrf_exempt
 from nsepython import *
 from django.contrib.auth.hashers import make_password, check_password
@@ -200,29 +201,25 @@ def get_watchlist(request):
         if data["symbol"] in watchlist:
             datas.append(data)
     
-    return JSONResponse(datas)
+    return HttpResponse(json.dumps(datas))
     
     
 @csrf_exempt 
 def remove_from_watchlist(request):
     
-    if request.body == b'':
-        return HttpResponse(json.loads({"code":0,"msg":"Error occoured"}))
-    else:
-        post_data = json.loads(request.body)
-        
-        user_id = post_data["user_id"]
-        watchlist_name = post_data["watchlist_name"]
-        index = post_data["index"]
-        
-        watchlist_obj = Watch_list.objects.get(user_id=user_id,w_name=watchlist_name,index = index)
-        watchlist_obj.delete()
-        
-        return HttpResponse(json.dumps({"code":1,"msg":"Removed from watchlist"}))
+    post_data = json.loads(request.body)
+    
+    user_id = post_data["user_id"]
+    index = post_data["index"]
+    
+    watchlist_obj = Watch_list.objects.get(user_id=user_id,index = index)
+    watchlist_obj.delete()
+    
+    return HttpResponse(json.dumps({"code":1,"msg":"Removed from watchlist"}))
     
     
 def get_data(request):
     watchlist_obj = Watch_list.objects.filter().order_by('-id').values()
-    pprint("watchlist_obj", watchlist_obj)
+    # pprint("watchlist_obj", watchlist_obj)
     return HttpResponse("True")
         

@@ -6,11 +6,26 @@ import { DeleteOutlined } from '@ant-design/icons';
 const WatchList_Get = () => {
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState([]);
+    const [remove, setDelete] = useState();
     const id = localStorage.getItem("id");
 
     useEffect(() => {
         getWatchList();
-    }, []);
+    }, [remove]);
+
+    const delete_watchlist = async(index,id) => {
+        try {
+            const response = await axios.post("http://127.0.0.1:8000/remove_from_watchlist", {
+                user_id: id,
+                index : index
+            });
+            setDelete(response.data)
+        } catch (error) {
+            console.log(error, "error");
+        } finally {
+            setLoading(false);
+        }
+    }
 
     const getWatchList = async() => {
         setLoading(true);
@@ -32,11 +47,7 @@ const WatchList_Get = () => {
             title: 'Company Name',
             dataIndex: 'companyName',
             key: 'companyName',
-            render: (text, record) => 
-            {console.log(record,"Record")}
-            // (
-            //     <span>{record.meta.companyName}</span>
-            // )
+            render: (text, record) => <span>{record.meta.companyName}</span>
         },
         {
             title: 'Symbol',
@@ -69,7 +80,7 @@ const WatchList_Get = () => {
                 console.log("Records Data : ", record);
                 return (
                     <>
-                        <DeleteOutlined />
+                        <DeleteOutlined onClick = { () => {delete_watchlist(record.symbol,id)} } />
                     </>
                 );
             }
@@ -78,7 +89,7 @@ const WatchList_Get = () => {
 
     return (
         <>
-            <h2>My WatchList</h2>
+            <h2 style={{marginTop:'110px'}}> </h2>
             {loading ? (
                 <Spin size="large" />
             ) : data && data.length > 0 ? (
