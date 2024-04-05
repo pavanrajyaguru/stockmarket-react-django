@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse,JSONResponse
 from django.views.decorators.csrf import csrf_exempt
 from nsepython import *
 from django.contrib.auth.hashers import make_password, check_password
@@ -185,11 +185,12 @@ def get_watchlist(request):
     
     # if request.body != b'':
     post_data = json.loads(request.body)
+    print(post_data,"post_Data")
     user_id = post_data["user_id"]
     # user_id = 1
     
     watchlist = list(Watch_list.objects.filter(user_id = user_id).values_list('index', flat=True))
-    
+    print("watchlist",watchlist)
     positions = nsefetch('https://www.nseindia.com/api/equity-stockIndices?index=SECURITIES%20IN%20F%26O')
     data_list = positions["data"]
     
@@ -199,7 +200,7 @@ def get_watchlist(request):
         if data["symbol"] in watchlist:
             datas.append(data)
     
-    return HttpResponse(datas)
+    return JSONResponse(datas)
     
     
 @csrf_exempt 

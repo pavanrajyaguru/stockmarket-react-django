@@ -23,6 +23,7 @@ import Register from "views/auth/signUp/Register";
 import WatchList from "views/admin/default/components/WatchList";
 // Auth Imports
 import SignInCentered from "views/auth/signIn";
+import WatchList_Get from "views/admin/default/components/WatchList_Get";
 
 
 const routes = [
@@ -60,6 +61,13 @@ const routes = [
     path : "/watchlist",
     icon: <Icon as={MdHome} width='20px' height='20px' color='inherit' />,
     component : WatchList,
+  },
+  {
+    name : "See WatchList",
+    layout: "/admin",
+    path : "/getWatchList",
+    icon: <Icon as={MdHome} width='20px' height='20px' color='inherit' />,
+    component : WatchList_Get,
   },
   {
     name: "Economic Calender",

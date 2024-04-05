@@ -5,7 +5,7 @@ import {PlusCircleOutlined} from '@ant-design/icons'
 const WatchList = () => {
   const [indices, setIndices] = useState([]);
   const [loading, setLoading] = useState(false);
-
+  var id = localStorage.getItem("id")
   const getIndices = async () => {
     setLoading(true);
     try {
@@ -20,7 +20,7 @@ const WatchList = () => {
   const handleAddToWatchList = async(symbol) =>{
     try{
       const response = await axios.post("http://127.0.0.1:8000/add_to_watchlist",{
-        user_id : 1,
+        user_id : id,
         index : symbol,
         watchlist_name : "abc"
       })
