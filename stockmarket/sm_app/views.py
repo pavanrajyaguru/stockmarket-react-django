@@ -183,13 +183,23 @@ def add_to_watchlist(request):
 @csrf_exempt
 def get_watchlist(request):
     
-    if request.body != b'':
-        post_data = json.loads(request.body)
-        user_id = post_data["user_id"]
-        
-        watchlist_obj = Watch_list.objects.filter(user_id = user_id).values()
-        
-        return HttpResponse(json.dumps(watchlist_obj))
+    # if request.body != b'':
+    post_data = json.loads(request.body)
+    user_id = post_data["user_id"]
+    # user_id = 1
+    
+    watchlist = list(Watch_list.objects.filter(user_id = user_id).values_list('index', flat=True))
+    
+    positions = nsefetch('https://www.nseindia.com/api/equity-stockIndices?index=SECURITIES%20IN%20F%26O')
+    data_list = positions["data"]
+    
+    datas = []
+    
+    for data in data_list:
+        if data["symbol"] in watchlist:
+            datas.append(data)
+    
+    return HttpResponse(datas)
     
     
 @csrf_exempt 
