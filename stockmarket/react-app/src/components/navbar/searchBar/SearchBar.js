@@ -10,11 +10,11 @@ import {
 import { SearchIcon } from "@chakra-ui/icons";
 import { NavLink } from "react-router-dom/cjs/react-router-dom.min";
 import axios from "axios";
+import { useHistory } from "react-router-dom/cjs/react-router-dom";
 export function SearchBar(props) {
-  const { variant, background, children, placeholder, borderRadius, ...rest } =props;
-  const handleLogout = () =>{
-    localStorage.clear();
-  }
+  const { variant, background, children, placeholder, borderRadius, ...rest } = props;
+  let name = localStorage.getItem("name")
+  const history = useHistory()
   return (
     <InputGroup>
       {/* <InputLeftElement
@@ -46,10 +46,18 @@ export function SearchBar(props) {
         borderRadius={borderRadius ? borderRadius : "30px"}
         placeholder={placeholder ? placeholder : "Search..."}
       /> */}
-      <NavLink to="/admin/default"> 
-      <Button onClick={handleLogout}>
-        LogOut
-      </Button>
+      <NavLink to="/admin/default">
+        {
+          name ? (<Button>
+            {name}
+          </Button>) :
+            <Button onClick={() =>{history.push('/auth/sign-in')}}>
+              Login
+            </Button>
+        }
+
+
+
       </NavLink>
     </InputGroup>
   );
